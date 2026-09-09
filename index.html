@@ -306,8 +306,8 @@
             for (let tabs = minTabs; tabs <= maxTabsLimit; tabs++) {
                 let actualTotalMg = tabs * tabletStrength;
                 
-                // หาความจุขวดตั้งแต่ 1 ถึง 150 ml (ไม่จำกัดแค่ไซส์มาตรฐาน)
-                for (let vol = 1; vol <= 150; vol++) {
+                // หาความจุขวดตั้งแต่ 10 ถึง 150 ml (ปรับให้เริ่มที่ 10 ml เพื่อความสะดวกในการตวงจริง)
+                for (let vol = 10; vol <= 150; vol++) {
                     let concentration = actualTotalMg / vol;
                     
                     // เช็คว่าความเข้มข้นหารลงตัวไหม (ยอมให้มีทศนิยม .5 ได้)
