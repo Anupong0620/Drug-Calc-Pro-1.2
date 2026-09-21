@@ -26,11 +26,10 @@
         }
         .show-smooth {
             opacity: 1;
-            max-height: 2000px; /* Large enough to fit content */
+            max-height: 2000px;
             transition: all 0.5s ease-in;
         }
         
-        /* สไตล์สำหรับปุ่ม Copy เล็กๆ ท้ายบรรทัด */
         .copy-line-btn {
             opacity: 0;
             transition: opacity 0.2s;
@@ -40,8 +39,18 @@
         }
         @media (max-width: 768px) {
             .copy-line-btn {
-                opacity: 1; /* แสดงตลอดเวลาในมือถือ */
+                opacity: 1; 
             }
+        }
+        
+        /* ซ่อนลูกศรขึ้นลงในช่อง input number */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 </head>
@@ -59,7 +68,6 @@
                 </div>
             </div>
             
-            <!-- Toggle Switch for Complex Mode -->
             <label class="flex items-center cursor-pointer bg-white/10 hover:bg-white/20 transition px-4 py-2 rounded-full border border-white/20 shadow-sm backdrop-blur-md">
                 <div class="relative">
                     <input type="checkbox" id="complexModeToggle" class="sr-only" onchange="toggleComplexMode()">
@@ -71,48 +79,63 @@
                 </div>
             </label>
         </div>
-        <!-- Decorative background elements -->
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-5 blur-3xl"></div>
     </header>
 
-    <main class="max-w-4xl mx-auto p-4 md:p-6 mt-4">
+    <main class="max-w-4xl mx-auto p-4 md:p-6 mt-2">
         
+        <div onclick="openFaviModal()" class="mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all border border-blue-400/50 group">
+            <div class="px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-white/20 group-hover:bg-white/30 backdrop-blur-sm p-3 rounded-xl text-white text-xl flex-shrink-0 w-12 h-12 flex items-center justify-center transition-colors border border-white/20">
+                        <i class="fas fa-virus"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-lg leading-tight">คำนวณสูตร Favipiravir อัตโนมัติ</h3>
+                        <p class="text-blue-100 text-xs font-medium mt-0.5">ระบุน้ำหนักผู้ป่วย > เลือกระบุค่ายาน้ำเชื่อม > นำข้อมูลเติมลงโปรแกรมทันที</p>
+                    </div>
+                </div>
+                <div class="bg-white/10 p-2 rounded-lg group-hover:translate-x-1 transition-transform">
+                    <i class="fas fa-chevron-right text-white"></i>
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             
-            <!-- 1. Doctor Input Section (Orange Box) -->
-            <div class="bg-orange-50 rounded-2xl shadow-sm border border-orange-200 flex flex-col overflow-hidden">
-                <div class="px-5 py-4 border-b border-orange-100 bg-white/50">
+            <div class="bg-orange-50 rounded-2xl shadow-sm border border-orange-200 flex flex-col h-full relative">
+                <div class="px-5 py-4 border-b border-orange-100 bg-white/50 rounded-t-2xl">
                     <h2 class="text-lg font-bold text-orange-600 flex items-center gap-2">
                         <i class="fas fa-user-md bg-orange-100 text-orange-500 p-1.5 rounded-lg text-sm"></i> 
                         1. ข้อมูลการสั่งยา (แพทย์)
                     </h2>
                 </div>
                 
-                <div class="p-5 flex-grow space-y-5">
-                    <!-- Target Dose -->
+                <div class="p-5 flex-grow space-y-5 relative">
+                    <!-- Target Dose 1 using Grid for perfect layout -->
                     <div>
                         <label id="labelDay1" class="block text-sm font-semibold text-slate-700 mb-2">ขนาดยาที่ต้องการ (ต่อมื้อ)</label>
-                        <div class="flex items-center bg-white rounded-xl border border-orange-200 overflow-hidden shadow-inner focus-within:ring-2 focus-within:ring-orange-300 focus-within:border-orange-400 transition-all">
-                            <button onclick="adjustValue('targetDose', -5)" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-minus"></i></button>
-                            <div class="relative flex-1 flex items-center justify-center h-full">
-                                <input type="number" id="targetDose" class="w-full text-center num-font font-bold text-2xl text-orange-600 bg-transparent border-none focus:outline-none focus:ring-0 p-0 m-0" value="80" oninput="calculate()">
-                                <span class="text-slate-400 font-medium absolute right-3 pointer-events-none">mg</span>
+                        <div class="grid grid-cols-[40px_1fr_40px] gap-1 bg-white rounded-xl border border-orange-200 shadow-inner p-1">
+                            <button onclick="adjustValue('targetDose', -5)" class="h-10 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"><i class="fas fa-minus"></i></button>
+                            <div class="relative flex items-center justify-center overflow-hidden">
+                                <input type="number" id="targetDose" class="w-full text-center num-font font-bold text-2xl text-orange-600 bg-transparent border-none focus:outline-none focus:ring-0 px-8 m-0" value="80" oninput="calculate()">
+                                <span class="absolute right-2 text-slate-400 font-medium pointer-events-none text-sm bg-white/90 px-1 rounded">mg</span>
                             </div>
-                            <button onclick="adjustValue('targetDose', 5)" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-plus"></i></button>
+                            <button onclick="adjustValue('targetDose', 5)" class="h-10 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
 
-                    <!-- Target Dose Maintenance (Hidden by default) -->
+                    <!-- Target Dose Maint using Grid -->
                     <div id="maintDoseContainer" class="hidden-smooth">
                         <div class="pt-2">
                             <label class="block text-sm font-semibold text-slate-700 mb-2">ขนาดยาวันที่ 2 เป็นต้นไป (ต่อมื้อ)</label>
-                            <div class="flex items-center bg-white rounded-xl border border-orange-200 overflow-hidden shadow-inner focus-within:ring-2 focus-within:ring-orange-300 focus-within:border-orange-400 transition-all">
-                                <button onclick="adjustValue('targetDoseMaint', -5)" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-minus"></i></button>
-                                <div class="relative flex-1 flex items-center justify-center h-full">
-                                    <input type="number" id="targetDoseMaint" class="w-full text-center num-font font-bold text-2xl text-orange-600 bg-transparent border-none focus:outline-none focus:ring-0 p-0 m-0" value="40" oninput="calculate()">
-                                    <span class="text-slate-400 font-medium absolute right-3 pointer-events-none">mg</span>
+                            <div class="grid grid-cols-[40px_1fr_40px] gap-1 bg-white rounded-xl border border-orange-200 shadow-inner p-1">
+                                <button onclick="adjustValue('targetDoseMaint', -5)" class="h-10 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"><i class="fas fa-minus"></i></button>
+                                <div class="relative flex items-center justify-center overflow-hidden">
+                                    <input type="number" id="targetDoseMaint" class="w-full text-center num-font font-bold text-2xl text-orange-600 bg-transparent border-none focus:outline-none focus:ring-0 px-8 m-0" value="40" oninput="calculate()">
+                                    <span class="absolute right-2 text-slate-400 font-medium pointer-events-none text-sm bg-white/90 px-1 rounded">mg</span>
                                 </div>
-                                <button onclick="adjustValue('targetDoseMaint', 5)" class="w-12 h-12 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-plus"></i></button>
+                                <button onclick="adjustValue('targetDoseMaint', 5)" class="h-10 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"><i class="fas fa-plus"></i></button>
                             </div>
                         </div>
                     </div>
@@ -120,38 +143,38 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">จำนวนครั้ง (ต่อวัน)</label>
-                            <div class="flex items-center bg-white rounded-xl border border-orange-200 overflow-hidden">
-                                <button onclick="adjustValue('dosesPerDay', -1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-minus text-xs"></i></button>
-                                <div class="relative flex-1 flex items-center justify-center h-full">
-                                    <input type="number" id="dosesPerDay" class="w-full text-center num-font font-bold text-lg text-slate-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 m-0" value="1" oninput="calculate()">
-                                    <span class="text-slate-500 text-sm absolute right-2 pointer-events-none">มื้อ</span>
+                            <div class="grid grid-cols-[32px_1fr_32px] gap-1 bg-white rounded-xl border border-orange-200 p-1">
+                                <button onclick="adjustValue('dosesPerDay', -1)" class="h-8 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-md transition"><i class="fas fa-minus text-xs"></i></button>
+                                <div class="relative flex items-center justify-center overflow-hidden">
+                                    <input type="number" id="dosesPerDay" class="w-full text-center num-font font-bold text-lg text-slate-700 bg-transparent border-none focus:outline-none focus:ring-0 px-6 m-0" value="1" oninput="calculate()">
+                                    <span class="absolute right-1 text-slate-400 text-sm pointer-events-none bg-white/90 px-0.5">มื้อ</span>
                                 </div>
-                                <button onclick="adjustValue('dosesPerDay', 1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-plus text-xs"></i></button>
+                                <button onclick="adjustValue('dosesPerDay', 1)" class="h-8 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-md transition"><i class="fas fa-plus text-xs"></i></button>
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-2">ระยะเวลา (วัน)</label>
-                            <div class="flex items-center bg-white rounded-xl border border-orange-200 overflow-hidden">
-                                <button onclick="adjustValue('days', -1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-minus text-xs"></i></button>
-                                <div class="relative flex-1 flex items-center justify-center h-full">
-                                    <input type="number" id="days" class="w-full text-center num-font font-bold text-lg text-slate-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 m-0" value="5" oninput="calculate()">
-                                    <span class="text-slate-500 text-sm absolute right-2 pointer-events-none">วัน</span>
+                            <div class="grid grid-cols-[32px_1fr_32px] gap-1 bg-white rounded-xl border border-orange-200 p-1">
+                                <button onclick="adjustValue('days', -1)" class="h-8 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-md transition"><i class="fas fa-minus text-xs"></i></button>
+                                <div class="relative flex items-center justify-center overflow-hidden">
+                                    <input type="number" id="days" class="w-full text-center num-font font-bold text-lg text-slate-700 bg-transparent border-none focus:outline-none focus:ring-0 px-6 m-0" value="5" oninput="calculate()">
+                                    <span class="absolute right-1 text-slate-400 text-sm pointer-events-none bg-white/90 px-0.5">วัน</span>
                                 </div>
-                                <button onclick="adjustValue('days', 1)" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:bg-orange-50 transition flex-shrink-0"><i class="fas fa-plus text-xs"></i></button>
+                                <button onclick="adjustValue('days', 1)" class="h-8 flex items-center justify-center text-slate-400 hover:text-orange-500 hover:bg-orange-50 rounded-md transition"><i class="fas fa-plus text-xs"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- แถบแสดงขนาดยารวม -->
-                <div class="bg-orange-100/60 border-t border-orange-100 px-5 py-3 flex justify-between items-center mt-auto">
+                
+                <!-- Summary Orange Box -->
+                <div class="bg-orange-100/60 border-t border-orange-100 px-5 py-3 flex justify-between items-center rounded-b-2xl mt-auto">
                     <span class="text-sm font-bold text-orange-800"><i class="fas fa-file-prescription mr-1"></i> ขนาดยารวมทั้งคอร์ส:</span>
                     <span class="num-font font-black text-xl text-orange-600"><span id="summaryTotalMg">0</span> <span class="text-sm font-semibold text-orange-500">mg</span></span>
                 </div>
             </div>
 
-            <!-- 2. Pharmacy Input Section (Purple Box) -->
-            <div class="bg-purple-50 rounded-2xl shadow-sm border border-purple-200 flex flex-col overflow-hidden">
-                <div class="px-5 py-4 border-b border-purple-100 bg-white/50">
+            <div class="bg-purple-50 rounded-2xl shadow-sm border border-purple-200 flex flex-col h-full relative">
+                <div class="px-5 py-4 border-b border-purple-100 bg-white/50 rounded-t-2xl">
                     <h2 class="text-lg font-bold text-purple-700 flex items-center gap-2">
                         <i class="fas fa-clinic-medical bg-purple-100 text-purple-500 p-1.5 rounded-lg text-sm"></i> 
                         2. ข้อมูลยาที่มี (ห้องยา)
@@ -161,13 +184,14 @@
                 <div class="p-5 flex flex-col justify-center flex-grow">
                     <div class="text-center mb-4">
                         <label class="block text-sm font-semibold text-slate-700 mb-3">ความแรงยาที่มี (ต่อเม็ด)</label>
-                        <div class="flex items-center bg-white rounded-xl border border-purple-200 overflow-hidden shadow-inner focus-within:ring-2 focus-within:ring-purple-300 focus-within:border-purple-400 transition-all max-w-xs mx-auto">
-                            <button onclick="adjustValue('tabletStrength', -5)" class="w-14 h-16 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:bg-purple-50 transition flex-shrink-0"><i class="fas fa-minus"></i></button>
-                            <div class="relative flex-1 flex items-center justify-center h-full">
-                                <input type="number" id="tabletStrength" class="w-full text-center num-font font-black text-4xl text-purple-700 bg-transparent border-none focus:outline-none focus:ring-0 p-0 m-0" value="250" oninput="calculate()">
-                                <span class="text-slate-400 font-medium absolute right-3 pointer-events-none">mg</span>
+                        <!-- Tablet Strength using Grid -->
+                        <div class="grid grid-cols-[48px_1fr_48px] gap-1 bg-white rounded-xl border border-purple-200 shadow-inner p-1 max-w-xs mx-auto">
+                            <button onclick="adjustValue('tabletStrength', -5)" class="h-14 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition"><i class="fas fa-minus"></i></button>
+                            <div class="relative flex items-center justify-center overflow-hidden">
+                                <input type="number" id="tabletStrength" class="w-full text-center num-font font-black text-4xl text-purple-700 bg-transparent border-none focus:outline-none focus:ring-0 px-8 m-0" value="250" oninput="calculate()">
+                                <span class="absolute right-2 text-slate-400 font-medium pointer-events-none bg-white/90 px-1 rounded">mg</span>
                             </div>
-                            <button onclick="adjustValue('tabletStrength', 5)" class="w-14 h-16 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:bg-purple-50 transition flex-shrink-0"><i class="fas fa-plus"></i></button>
+                            <button onclick="adjustValue('tabletStrength', 5)" class="h-14 flex items-center justify-center text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition"><i class="fas fa-plus"></i></button>
                         </div>
                     </div>
                     
@@ -176,36 +200,29 @@
                         <p>หากระบุ 75mg ระบบจะค้นหาสูตร Oseltamivir ให้เป็นอันดับแรก</p>
                     </div>
                 </div>
-                <!-- แถบแสดงจำนวนยาที่ใช้ -->
-                <div class="bg-purple-100/60 border-t border-purple-100 px-5 py-3 flex justify-between items-center mt-auto">
+                
+                <!-- Summary Purple Box -->
+                <div class="bg-purple-100/60 border-t border-purple-100 px-5 py-3 flex justify-between items-center rounded-b-2xl mt-auto">
                     <span class="text-sm font-bold text-purple-800"><i class="fas fa-pills mr-1"></i> จำนวนเม็ดยาที่ต้องใช้:</span>
-                    <span class="num-font font-black text-xl text-purple-600"><span id="summaryTotalTabs">0</span> <span class="text-sm font-semibold text-purple-500">เม็ด <span id="summaryTotalTabsMg" class="font-normal text-purple-400 text-[11px] ml-0.5"></span></span></span>
+                    <span class="num-font font-black text-xl text-purple-700">
+                        <span id="summaryTotalTabs">0</span> 
+                        <span class="text-sm font-semibold text-purple-500">เม็ด <span id="summaryTotalTabsMg" class="text-[12px] font-normal text-purple-400 opacity-90"></span></span>
+                    </span>
                 </div>
             </div>
 
         </div>
 
-        <!-- Results Section -->
         <div id="resultsSection" class="mt-8 pt-6 border-t border-slate-200">
             <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                 <i class="fas fa-flask text-indigo-500"></i> ทางเลือก: สูตรผสมยาน้ำเชื่อม (Syrup Formulation)
             </h3>
             
             <div id="bestOptionContainer" class="mb-4">
-                <!-- Best option will be injected here -->
-            </div>
-
-            <!-- Toggle for more options -->
-            <button id="toggleBtn" onclick="toggleMoreOptions()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium rounded-xl transition flex items-center justify-center gap-2 mb-4">
-                ซ่อนทางเลือกอื่นๆ <i class="fas fa-chevron-up transition-transform duration-300" id="toggleIcon"></i>
-            </button>
-
-            <div id="moreOptionsContainer" class="space-y-4 show-smooth">
-                <!-- Alternative options injected here -->
+                <!-- Best options will be injected here -->
             </div>
             
-            <!-- Empty state -->
-            <div id="noResultWarning" class="hidden bg-red-50 border border-red-200 rounded-xl p-6 text-center text-red-600">
+            <div id="noResultWarning" class="hidden bg-red-50 border border-red-200 rounded-xl p-6 text-center text-red-600 mt-4">
                 <i class="fas fa-exclamation-triangle text-3xl mb-2 opacity-80"></i>
                 <p class="font-semibold">ไม่พบสูตรที่สามารถผสมได้ลงตัว</p>
                 <p class="text-sm mt-1 opacity-80">กรุณาตรวจสอบขนาดยา หรือความแรงยาอีกครั้ง</p>
@@ -213,28 +230,160 @@
         </div>
     </main>
 
+    <div id="faviModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex justify-center items-center px-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300 favi-modal-content">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-t-2xl px-6 py-4 flex justify-between items-center text-white">
+                <h3 class="font-bold text-lg"><i class="fas fa-virus mr-2"></i> คำนวณ Favipiravir อัตโนมัติ</h3>
+                <button onclick="closeFaviModal()" class="text-white/80 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">น้ำหนักผู้ป่วย (kg)</label>
+                    <div class="relative">
+                        <input type="number" id="faviWeight" oninput="previewFavi()" class="w-full border-2 border-slate-200 rounded-xl pl-4 pr-12 py-3 text-xl font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-0 transition" placeholder="ระบุน้ำหนัก...">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 font-semibold text-slate-400">kg</span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">รูปแบบยาที่ต้องการ (เพื่อให้ปัดเศษถูกต้อง)</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="faviType" value="syrup" onchange="previewFavi()" class="peer sr-only" checked>
+                            <div class="border-2 border-slate-200 rounded-xl p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 transition flex flex-col items-center">
+                                <i class="fas fa-flask text-2xl mb-1"></i>
+                                <span class="font-semibold text-sm">ยาน้ำเชื่อม</span>
+                                <span class="text-[10px] text-slate-400 peer-checked:text-blue-500/80 mt-0.5">อิงตามตาราง รพ.</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="faviType" value="tablet" onchange="previewFavi()" class="peer sr-only">
+                            <div class="border-2 border-slate-200 rounded-xl p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-700 transition flex flex-col items-center">
+                                <i class="fas fa-pills text-2xl mb-1"></i>
+                                <span class="font-semibold text-sm">ยาเม็ด (200mg)</span>
+                                <span class="text-[10px] text-slate-400 peer-checked:text-blue-500/80 mt-0.5">ปัดเศษให้หักครึ่งเม็ดได้</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="faviPreview" class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 hidden">
+                    <div class="text-xs font-bold text-blue-800 mb-2 border-b border-blue-200 pb-1 flex justify-between">
+                        <span>พรีวิวขนาดยา (Target Dose)</span>
+                        <span class="opacity-75">สูตร 35/15 mg/kg</span>
+                    </div>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-sm font-semibold text-slate-600">Day 1 (Loading):</span>
+                        <span class="font-black text-blue-700 text-xl"><span id="pvDay1">0</span> <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span></span>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm font-semibold text-slate-600">Day 2-5 (Maint):</span>
+                        <span class="font-black text-blue-700 text-xl"><span id="pvDay2">0</span> <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span></span>
+                    </div>
+                </div>
+
+                <button onclick="applyFaviData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-magic"></i> เติมข้อมูลลงโปรแกรม
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let isComplexMode = false;
         
+        function openFaviModal() {
+            const modal = document.getElementById('faviModal');
+            const content = modal.querySelector('.favi-modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            document.getElementById('faviWeight').focus();
+        }
+
+        function closeFaviModal() {
+            const modal = document.getElementById('faviModal');
+            const content = modal.querySelector('.favi-modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+
+        function previewFavi() {
+            const bw = parseFloat(document.getElementById('faviWeight').value);
+            const type = document.querySelector('input[name="faviType"]:checked').value;
+            const previewBox = document.getElementById('faviPreview');
+
+            if (!bw || bw <= 0) {
+                previewBox.classList.add('hidden');
+                return;
+            }
+
+            let calcD1 = bw * 35;
+            let calcD2 = bw * 15;
+            
+            if (calcD1 > 1600) calcD1 = 1600; 
+            if (calcD2 > 600) calcD2 = 600;
+
+            let targetD1, targetD2;
+            
+            if(type === 'tablet') {
+                targetD1 = Math.round(calcD1 / 100) * 100;
+                targetD2 = Math.round(calcD2 / 100) * 100;
+            } else {
+                // ปัดเศษหลักสิบตามตารางเป๊ะๆ เพื่อให้ตัวเลข cc หารลงตัว
+                targetD1 = Math.round(calcD1 / 10) * 10;
+                targetD2 = Math.round(calcD2 / 10) * 10;
+            }
+
+            document.getElementById('pvDay1').innerText = targetD1.toLocaleString();
+            document.getElementById('pvDay2').innerText = targetD2.toLocaleString();
+            previewBox.classList.remove('hidden');
+        }
+
+        function applyFaviData() {
+            const bw = parseFloat(document.getElementById('faviWeight').value);
+            if (!bw || bw <= 0) {
+                alert('กรุณาระบุน้ำหนักผู้ป่วย');
+                return;
+            }
+
+            const d1Text = document.getElementById('pvDay1').innerText.replace(/,/g, '');
+            const d2Text = document.getElementById('pvDay2').innerText.replace(/,/g, '');
+            
+            if (!isComplexMode) {
+                toggleComplexMode();
+            }
+
+            document.getElementById('targetDose').value = d1Text;
+            document.getElementById('targetDoseMaint').value = d2Text;
+            document.getElementById('dosesPerDay').value = 2; 
+            document.getElementById('days').value = 5; 
+            document.getElementById('tabletStrength').value = 200; 
+
+            closeFaviModal();
+            calculate(); 
+        }
+
         function toggleComplexMode() {
             isComplexMode = !isComplexMode;
             const toggleDot = document.querySelector('.dot');
             const modeText = document.getElementById('modeText');
             const maintContainer = document.getElementById('maintDoseContainer');
-            const labelDay1 = document.getElementById('labelDay1'); // เพิ่มการอ้างอิง
+            const labelDay1 = document.getElementById('labelDay1');
             
             if (isComplexMode) {
                 toggleDot.style.transform = 'translateX(100%)';
                 modeText.innerHTML = '<span class="text-green-300">มีขนาดยาวันแรก (Loading)</span>';
                 maintContainer.classList.remove('hidden-smooth');
                 maintContainer.classList.add('show-smooth');
-                if(labelDay1) labelDay1.innerText = 'ขนาดยาวันแรก (ต่อมื้อ)'; // เปลี่ยนข้อความ
+                if(labelDay1) labelDay1.innerText = 'ขนาดยาวันแรก (ต่อมื้อ)';
             } else {
                 toggleDot.style.transform = 'translateX(0)';
                 modeText.innerHTML = 'ขนาดยาเท่ากันทุกวัน';
                 maintContainer.classList.remove('show-smooth');
                 maintContainer.classList.add('hidden-smooth');
-                if(labelDay1) labelDay1.innerText = 'ขนาดยาที่ต้องการ (ต่อมื้อ)'; // คืนค่าข้อความ
+                if(labelDay1) labelDay1.innerText = 'ขนาดยาที่ต้องการ (ต่อมื้อ)';
             }
             calculate();
         }
@@ -249,7 +398,6 @@
         }
 
         function calculate() {
-            // Retrieve and parse values from inputs
             const targetDose = parseFloat(document.getElementById('targetDose').value) || 0;
             const tabletStrength = parseFloat(document.getElementById('tabletStrength').value) || 0;
             const dosesPerDay = parseInt(document.getElementById('dosesPerDay').value) || 0;
@@ -259,21 +407,15 @@
             const resultsSection = document.getElementById('resultsSection');
             const noResultWarning = document.getElementById('noResultWarning');
             const bestOptionContainer = document.getElementById('bestOptionContainer');
-            const moreOptionsContainer = document.getElementById('moreOptionsContainer');
-            const toggleBtn = document.getElementById('toggleBtn');
 
-            // Hide everything if inputs are invalid or zero
+            // 1. ตรวจสอบข้อมูลครบถ้วน
             if (targetDose <= 0 || tabletStrength <= 0 || dosesPerDay <= 0 || days <= 0 || (isComplexMode && targetDoseMaint <= 0)) {
                 resultsSection.classList.add('hidden');
                 noResultWarning.classList.add('hidden');
                 return;
             }
 
-            // Show results section
-            resultsSection.classList.remove('hidden');
-            noResultWarning.classList.add('hidden');
-
-            // 🌟 1. คำนวณปริมาณยารวมทั้งหมด (Total Mg) 🌟
+            // 2. คำนวณปริมาณยารวม
             let targetTotalMg = 0;
             if (isComplexMode) {
                 targetTotalMg = (targetDose * dosesPerDay) + (targetDoseMaint * dosesPerDay * (days - 1));
@@ -281,39 +423,28 @@
                 targetTotalMg = targetDose * dosesPerDay * days;
             }
 
-            // อัปเดตตัวเลขขนาดยารวม ในกล่องแพทย์
             if (document.getElementById('summaryTotalMg')) {
                 document.getElementById('summaryTotalMg').innerText = targetTotalMg.toLocaleString(undefined, { maximumFractionDigits: 1 });
             }
 
-            // 🌟 2. คำนวณแบบ Zero-Waste (หาจำนวนเม็ดที่น้อยที่สุดที่เป็นไปได้) 🌟
+            // 3. หาจำนวนเม็ดยาขั้นต่ำสุด
             let minTabs = Math.ceil(targetTotalMg / tabletStrength);
-            
-            // อัปเดตตัวเลขเม็ดยาตั้งต้น ในกล่องห้องยา
-            if (document.getElementById('summaryTotalTabs')) {
-                document.getElementById('summaryTotalTabs').innerText = minTabs.toLocaleString();
-                if (document.getElementById('summaryTotalTabsMg')) {
-                    document.getElementById('summaryTotalTabsMg').innerText = `(${(minTabs * tabletStrength).toLocaleString()} mg)`;
-                }
-            }
 
             let results = [];
-            // เผื่อระยะการค้นหาเม็ดยาเพิ่มขึ้นเล็กน้อย เพื่อหาความเข้มข้นที่ลงตัว
             let maxTabsLimit = minTabs + 10; 
-            const standardVolumes = [15, 20, 30, 45, 60, 90, 100, 120, 150];
+            
+            // เช็คว่าเป็นสูตร Favi หรือไม่
+            let isFaviRegimenCheck = isComplexMode && tabletStrength === 200 && dosesPerDay === 2;
 
-            // 🌟 3. ค้นหาสูตรทั้งหมด 🌟
+            // 4. วนลูปหาความเป็นไปได้ เริ่มที่ 10 ml
             for (let tabs = minTabs; tabs <= maxTabsLimit; tabs++) {
                 let actualTotalMg = tabs * tabletStrength;
                 
-                // หาความจุขวดตั้งแต่ 10 ถึง 150 ml (ปรับให้เริ่มที่ 10 ml เพื่อความสะดวกในการตวงจริง)
                 for (let vol = 10; vol <= 150; vol++) {
                     let concentration = actualTotalMg / vol;
                     
-                    // เช็คว่าความเข้มข้นหารลงตัวไหม (ยอมให้มีทศนิยม .5 ได้)
                     if (Math.abs((concentration * 2) - Math.round(concentration * 2)) > 0.001) continue;
 
-                    // เช็คปริมาณที่ต้องป้อน ว่าหารลงตัวไหม
                     let doseVol = targetDose / concentration;
                     if (Math.abs((doseVol * 10) - Math.round(doseVol * 10)) > 0.001) continue;
 
@@ -323,8 +454,10 @@
                         if (Math.abs((doseMaintVol * 10) - Math.round(doseMaintVol * 10)) > 0.001) continue;
                     }
 
-                    // เช็คว่าปริมาตรน้ำเพียงพอต่อการใช้ทั้งคอร์สหรือไม่
                     let requiredVol = isComplexMode ? doseVol * dosesPerDay + (doseMaintVol * dosesPerDay * (days - 1)) : doseVol * dosesPerDay * days;
+                    
+                    let isStdFavi = isFaviRegimenCheck && Math.abs(concentration - 100) < 0.001;
+
                     if (requiredVol <= vol) {
                         results.push({
                             volume: vol,
@@ -332,25 +465,21 @@
                             concentration: concentration,
                             doseVol: doseVol,
                             doseMaintVol: doseMaintVol,
-                            isStandard: false
+                            isStandard: isStdFavi,
+                            standardLabel: isStdFavi ? "100 mg/ml" : ""
                         });
                     }
                 }
             }
 
-            // 🌟 4. เช็คสูตรมาตรฐาน (เฉพาะ Oseltamivir) 🌟
+            // 5. Oseltamivir special case
             if (tabletStrength === 75) {
                 let stdResult = null;
-                // Rule 1: < 30mg -> 4 tabs, 30ml
                 if (targetDose <= 30 && minTabs <= 4) {
                     stdResult = { volume: 30, totalTabs: 4, concentration: (4*75)/30, doseVol: targetDose/((4*75)/30), isStandard: true, standardLabel: "4 เม็ด + น้ำ 30 ml" };
-                }
-                // Rule 2: 30-45mg -> 6 tabs, 45ml
-                else if (targetDose <= 45 && targetDose > 30 && minTabs <= 6) {
+                } else if (targetDose <= 45 && targetDose > 30 && minTabs <= 6) {
                     stdResult = { volume: 45, totalTabs: 6, concentration: (6*75)/45, doseVol: targetDose/((6*75)/45), isStandard: true, standardLabel: "6 เม็ด + น้ำ 45 ml" };
-                }
-                // Rule 3: 45-60mg -> 8 tabs, 60ml
-                else if (targetDose <= 60 && targetDose > 45 && minTabs <= 8) {
+                } else if (targetDose <= 60 && targetDose > 45 && minTabs <= 8) {
                     stdResult = { volume: 60, totalTabs: 8, concentration: (8*75)/60, doseVol: targetDose/((8*75)/60), isStandard: true, standardLabel: "8 เม็ด + น้ำ 60 ml" };
                 }
 
@@ -358,63 +487,42 @@
                      if (isComplexMode) {
                         stdResult.doseMaintVol = targetDoseMaint / stdResult.concentration;
                     }
-                    let existingIndex = results.findIndex(r => r.volume === stdResult.volume && r.totalTabs === stdResult.totalTabs);
-                    if(existingIndex >= 0) {
-                        results[existingIndex].isStandard = true;
-                        results[existingIndex].standardLabel = stdResult.standardLabel;
-                    } else {
-                        results.push(stdResult);
-                    }
+                    results.push(stdResult);
                 }
             }
 
-            // 🌟 5. กรองผลลัพธ์ให้เหลือเฉพาะสูตรที่ใช้ "เม็ดยาน้อยที่สุด" เพื่อลดความซ้ำซ้อน 🌟
+            // 6. การกรองให้เหลือเฉพาะทางเลือกที่ดีที่สุด! (อนุญาตให้ขวดหลายขนาดแสดงพร้อมกันได้ ถ้าใช้เม็ดยาเท่ากัน)
             if (results.length > 0) {
-                // หาค่าจำนวนเม็ดยาที่น้อยที่สุดจากตัวเลือกที่ไม่ใช่สูตรมาตรฐาน
-                const nonStdResults = results.filter(r => !r.isStandard);
-                if (nonStdResults.length > 0) {
-                    const lowestTabsFound = Math.min(...nonStdResults.map(r => r.totalTabs));
-                    
-                    // อัปเดตจำนวนเม็ดยาที่ใช้ตามจริง (ในกรณีที่สูตรต้องปัดเม็ดยาขึ้น)
-                    if (document.getElementById('summaryTotalTabs')) {
-                        document.getElementById('summaryTotalTabs').innerText = lowestTabsFound.toLocaleString();
-                         if (document.getElementById('summaryTotalTabsMg')) {
-                            document.getElementById('summaryTotalTabsMg').innerText = `(${(lowestTabsFound * tabletStrength).toLocaleString()} mg)`;
-                        }
-                    }
-                    
-                    // เก็บเฉพาะสูตรมาตรฐาน และสูตรที่ใช้เม็ดยาเท่ากับขั้นต่ำสุด
-                    results = results.filter(res => res.isStandard || res.totalTabs === lowestTabsFound);
-                } else if (results.length > 0 && results[0].isStandard) {
-                     if (document.getElementById('summaryTotalTabs')) {
-                        document.getElementById('summaryTotalTabs').innerText = results[0].totalTabs.toLocaleString();
-                         if (document.getElementById('summaryTotalTabsMg')) {
-                            document.getElementById('summaryTotalTabsMg').innerText = `(${(results[0].totalTabs * tabletStrength).toLocaleString()} mg)`;
-                        }
+                // หาจำนวนเม็ดยาที่ "น้อยที่สุด" จากตัวเลือกทั้งหมด
+                const lowestTabsFound = Math.min(...results.map(r => r.totalTabs));
+                
+                // คัดเอา "ทุกความจุ" ที่ใช้เม็ดยาเท่ากับค่าที่ต่ำที่สุด เพื่อให้เกิดทางเลือก (เช่น 12, 24, 48 cc)
+                results = results.filter(res => res.totalTabs === lowestTabsFound);
+
+                // อัปเดตจำนวนเม็ดยาที่ห้องยาต้องใช้
+                if (document.getElementById('summaryTotalTabs')) {
+                    document.getElementById('summaryTotalTabs').innerText = lowestTabsFound.toLocaleString();
+                    if(document.getElementById('summaryTotalTabsMg')) {
+                        document.getElementById('summaryTotalTabsMg').innerText = `(${(lowestTabsFound * tabletStrength).toLocaleString()} mg)`;
                     }
                 }
             }
 
-            // 🌟 6. เรียงลำดับผลลัพธ์ 🌟
+            // 7. จัดเรียงลำดับ
             results.sort((a, b) => {
-                // Priority 1: สูตรมาตรฐานของ รพ. ขึ้นก่อนเสมอ
+                // 1. ถ้าเป็นสูตรมาตรฐาน (เช่น Favi 100mg/ml) ให้ขึ้นอันดับแรกเสมอ
                 if (a.isStandard !== b.isStandard) return a.isStandard ? -1 : 1;
                 
-                // Priority 2: ปริมาตรน้ำ <= 60 ml สำคัญกว่าปริมาตรใหญ่ (ไม่ว่าจะเป็นไซส์มาตรฐานหรือไม่)
+                // 2. ปริมาตรที่ไม่เกิน 60ml จะถูกจัดให้อยู่ด้านบน
                 const aLeq60 = a.volume <= 60 ? 1 : 0;
                 const bLeq60 = b.volume <= 60 ? 1 : 0;
-                if (aLeq60 !== bLeq60) return bLeq60 - aLeq60; // 1 (<=60) มาก่อน 0 (>60)
+                if (aLeq60 !== bLeq60) return bLeq60 - aLeq60; 
                 
-                // Priority 3: ถ้าอยู่ในกลุ่มเดียวกัน (<=60 หรือ >60 เหมือนกัน) ให้ไซส์มาตรฐาน รพ. ชนะไซส์แปลกๆ
-                const aIsStdVol = standardVolumes.includes(a.volume) ? 1 : 0;
-                const bIsStdVol = standardVolumes.includes(b.volume) ? 1 : 0;
-                if (aIsStdVol !== bIsStdVol) return bIsStdVol - aIsStdVol;
-                
-                // Priority 4: เรียงตามปริมาตรน้ำรวมจากน้อยไปมาก
+                // 3. เรียงตามปริมาตรจากน้อยไปมาก
                 return a.volume - b.volume;
             });
 
-            // ลบตัวเลือกที่ซ้ำกันออก (เผื่อกรณีลอจิกทับซ้อน)
+            // ลบตัวซ้ำ (เผื่อมี)
             const uniqueResults = [];
             const seen = new Set();
             results.forEach(r => {
@@ -427,37 +535,37 @@
             results = uniqueResults;
 
             bestOptionContainer.innerHTML = '';
-            moreOptionsContainer.innerHTML = '';
+            resultsSection.classList.remove('hidden');
 
             if (results.length === 0) {
                 noResultWarning.classList.remove('hidden');
-                toggleBtn.classList.add('hidden');
                 return;
+            } else {
+                noResultWarning.classList.add('hidden');
             }
 
-            // Construct HTML for Option Card
-            const createCardHTML = (res, index) => {
+            results.forEach((res, index) => {
                 const isBest = index === 0;
                 const isOver60 = res.volume > 60;
                 
-                // 1. กำหนดสีกรอบใหญ่ของการ์ด (Card Border)
+                // กำหนดสีกรอบ: น้ำเงิน (แนะนำ), เขียว (<60ml), ส้ม (>60ml)
                 let borderClass = '';
-                if (isBest) {
-                    // สูตรแนะนำ: สีน้ำเงิน (ถ้าเกิน 60ml เป็นสีส้ม)
-                    borderClass = isOver60 ? 'border-orange-400 shadow-md ring-4 ring-orange-50' : 'border-indigo-400 shadow-md ring-4 ring-indigo-50';
+                if (isOver60) {
+                    borderClass = isBest ? 'border-orange-400 ring-4 ring-orange-50 shadow-md mt-4' : 'border-orange-300 shadow-sm opacity-90 mt-4';
+                } else if (isBest) {
+                    borderClass = 'border-indigo-400 ring-4 ring-indigo-50 shadow-md mt-4';
                 } else {
-                    // ทางเลือกอื่น: ไม่เกิน 60ml สีเขียว, เกิน 60ml สีส้ม
-                    borderClass = isOver60 ? 'border-orange-300 hover:border-orange-400 shadow-sm opacity-90' : 'border-emerald-300 hover:border-emerald-400 shadow-sm opacity-90';
+                    borderClass = 'border-emerald-400 shadow-md mt-4';
                 }
                 
                 let badgeText = isBest ? '<i class="fas fa-star text-yellow-300 mr-1"></i> สูตรที่แนะนำ (ตวงง่าย)' : '';
                 if (res.isStandard) {
-                    badgeText = `<i class="fas fa-check-circle text-white mr-1"></i> สูตรมาตรฐาน Oseltamivir`;
+                    badgeText = isBest ? `<i class="fas fa-star text-yellow-300 mr-1"></i> สูตรแนะนำ (${res.standardLabel})` : `<i class="fas fa-check-circle text-white mr-1"></i> ${res.standardLabel}`;
+                } else if (!isOver60 && !isBest) {
+                    badgeText = '<i class="fas fa-leaf text-white mr-1"></i> สูตรทางเลือก';
                 }
-
                 const showBadge = badgeText !== '';
 
-                // 2. กำหนดสีของกล่องปริมาตรน้ำเชื่อมด้านใน
                 let volBoxBg = 'bg-slate-50';
                 let volBoxBorder = 'border-slate-100';
                 let volTextNumColor = 'text-indigo-600';
@@ -466,19 +574,18 @@
                 let volBadgeBg = 'bg-slate-200/50';
                 let volBadgeText = 'text-slate-500';
 
+                // ปรับสีกล่องปริมาตรถ้าเกิน 60ml หรือเป็นสีเขียว
                 if (isOver60) {
-                    // กรณีเกิน 60 ml -> โทนสีส้มแจ้งเตือน
                     volBoxBg = 'bg-orange-50';
-                    volBoxBorder = 'border-orange-300';
+                    volBoxBorder = 'border-orange-200';
                     volTextNumColor = 'text-orange-600';
                     volTextUnitColor = 'text-orange-400';
                     volIconColor = 'text-orange-200';
                     volBadgeBg = 'bg-orange-200/50';
                     volBadgeText = 'text-orange-700';
                 } else if (!isBest) {
-                    // กรณีไม่เกิน 60 ml และไม่ใช่สูตรแนะนำ -> โทนสีเขียว
-                    volBoxBg = 'bg-emerald-50/50';
-                    volBoxBorder = 'border-emerald-300';
+                    volBoxBg = 'bg-emerald-50';
+                    volBoxBorder = 'border-emerald-200';
                     volTextNumColor = 'text-emerald-600';
                     volTextUnitColor = 'text-emerald-500';
                     volIconColor = 'text-emerald-100';
@@ -489,197 +596,127 @@
                 let doseBoxHtml = '';
                 if (isComplexMode) {
                     doseBoxHtml = `
-                        <div class="flex flex-col justify-center border-l border-slate-100 pl-4">
-                            <span class="text-sm font-semibold text-slate-500 mb-2">ปริมาณป้อนต่อมื้อ</span>
-                            <div class="flex justify-between items-end mb-1">
-                                <span class="text-xs text-slate-400">วันที่ 1:</span>
-                                <span class="num-font font-bold text-indigo-600 text-lg">${res.doseVol} <span class="text-xs text-indigo-400">ml</span></span>
+                        <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm w-full flex flex-col justify-center">
+                            <span class="text-sm font-semibold text-slate-500 mb-3 text-left">ปริมาณป้อนต่อมื้อ</span>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-sm text-slate-500">วันที่ 1:</span>
+                                <span class="num-font font-bold text-indigo-600 text-lg">${res.doseVol} <span class="text-sm font-semibold text-indigo-400">ml</span></span>
                             </div>
                             <div class="flex justify-between items-end">
-                                <span class="text-xs text-slate-400">วันที่ 2 เป็นต้นไป:</span>
-                                <span class="num-font font-bold text-indigo-600 text-lg">${res.doseMaintVol} <span class="text-xs text-indigo-400">ml</span></span>
+                                <span class="text-sm text-slate-500">วันที่ 2 เป็นต้นไป:</span>
+                                <span class="num-font font-bold text-indigo-600 text-lg">${res.doseMaintVol} <span class="text-sm font-semibold text-indigo-400">ml</span></span>
                             </div>
                         </div>
                     `;
                 } else {
                     doseBoxHtml = `
-                        <div class="flex flex-col justify-center items-center border-l border-slate-100 p-2">
-                            <span class="text-sm font-semibold text-slate-500 mb-2">ป้อนคนไข้มื้อละ</span>
+                        <div class="bg-white rounded-xl p-4 text-center border border-slate-100 flex flex-col justify-center items-center relative shadow-sm w-full">
+                            <span class="text-sm font-semibold text-slate-500 mb-1">ป้อนคนไข้มื้อละ</span>
                             <span class="num-font font-black text-3xl text-indigo-600 tracking-tight">${res.doseVol} <span class="text-base font-semibold text-indigo-400">ml</span></span>
                         </div>
                     `;
                 }
 
-                // Prepare label lines for easy copying
-                let line1 = isComplexMode 
-                    ? `รับประทาน วันแรก ครั้งละ ${res.doseVol} ซีซี (${targetDose} mg)` 
-                    : `รับประทาน ครั้งละ ${res.doseVol} ซีซี (${targetDose} mg)`;
+                // รูปแบบฉลากยา 
+                let line1 = '', line2 = '', line3 = '', line4 = '';
                 
-                let line2 = isComplexMode
-                    ? `วันที่ 2 เป็นต้นไป ครั้งละ ${res.doseMaintVol} ซีซี (${targetDoseMaint} mg)`
-                    : `วันละ ${dosesPerDay} ครั้ง เวลา ${dosesPerDay === 1 ? 'เช้า' : dosesPerDay === 2 ? 'เช้า - เย็น' : dosesPerDay === 3 ? 'เช้า - กลางวัน - เย็น' : 'เช้า - กลางวัน - เย็น - ก่อนนอน'} ต่อเนื่อง ${days} วัน`;
-                
-                let line3 = isComplexMode
-                    ? `วันละ ${dosesPerDay} ครั้ง เวลา ${dosesPerDay === 1 ? 'เช้า' : dosesPerDay === 2 ? 'เช้า - เย็น' : dosesPerDay === 3 ? 'เช้า - กลางวัน - เย็น' : 'เช้า - กลางวัน - เย็น - ก่อนนอน'} ต่อเนื่อง ${days} วัน`
-                    : `เขย่าขวดก่อนใช้ และเก็บในตู้เย็น`;
-                
-                let line4 = isComplexMode ? `เขย่าขวดก่อนใช้ และเก็บในตู้เย็น` : '';
+                // ตรวจเช็คว่าเป็น Format ของ Favipiravir หรือไม่
+                if (isFaviRegimenCheck) {
+                    line1 = `กิน ${res.doseVol} ซีซี (${targetDose} mg) ทุก 12 ชั่วโมง วันที่ 1`;
+                    line2 = `และ ${res.doseMaintVol} ซีซี (${targetDoseMaint} mg) ทุก 12 ชั่วโมง วันที่ 2-${days}`;
+                    line3 = `เวลา 8.00น.และ 20.00น.`;
+                } else {
+                    let timeStr = dosesPerDay === 1 ? 'เช้า' : dosesPerDay === 2 ? 'เช้า - เย็น' : dosesPerDay === 3 ? 'เช้า - กลางวัน - เย็น' : 'เช้า - กลางวัน - เย็น - ก่อนนอน';
+                    
+                    if (isComplexMode) {
+                        line1 = `รับประทาน วันแรก ครั้งละ ${res.doseVol} ซีซี (${targetDose} mg)`;
+                        line2 = `วันที่ 2 เป็นต้นไป ครั้งละ ${res.doseMaintVol} ซีซี (${targetDoseMaint} mg)`;
+                        line3 = `วันละ ${dosesPerDay} ครั้ง เวลา ${timeStr} ต่อเนื่อง ${days} วัน`;
+                        line4 = `เขย่าขวดก่อนใช้ และเก็บในตู้เย็น`;
+                    } else {
+                        line1 = `รับประทาน ครั้งละ ${res.doseVol} ซีซี (${targetDose} mg)`;
+                        line2 = `วันละ ${dosesPerDay} ครั้ง เวลา ${timeStr} ต่อเนื่อง ${days} วัน`;
+                        line3 = `เขย่าขวดก่อนใช้ และเก็บในตู้เย็น`;
+                    }
+                }
 
-                let fullTextForCopy = line1 + "\n" + line2 + "\n" + line3 + (line4 ? "\n" + line4 : "");
-
-                return `
-                    <div class="relative bg-white rounded-2xl border-2 ${borderClass} transition-all duration-300 mt-4">
-                        ${showBadge ? `
-                            <div class="absolute -top-3.5 left-4 bg-${res.isStandard ? 'emerald-500' : 'indigo-500'} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm z-10">
-                                ${badgeText}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="p-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                                <!-- Volume Box -->
-                                <div class="${volBoxBg} rounded-xl p-4 text-center border ${volBoxBorder} flex flex-col justify-center items-center relative overflow-hidden transition-colors">
-                                    <i class="fas fa-flask absolute -right-4 -bottom-4 text-6xl ${volIconColor} opacity-50 transform -rotate-12"></i>
-                                    <span class="text-sm font-semibold text-slate-500 mb-1 relative z-10">ปริมาตรน้ำเชื่อมรวม</span>
-                                    <span class="num-font font-black text-4xl ${volTextNumColor} relative z-10 tracking-tight">${res.volume} <span class="text-xl font-semibold ${volTextUnitColor}">ml</span></span>
-                                    <div class="mt-2 ${volBadgeBg} rounded px-2 py-0.5 text-[11px] font-medium ${volBadgeText} flex items-center gap-1 relative z-10">
-                                        <i class="fas fa-tint"></i> ความเข้มข้น ${res.concentration} mg/ml
-                                    </div>
-                                </div>
-
-                                <!-- Tablets Box -->
-                                <div class="bg-slate-50 rounded-xl p-4 text-center border border-slate-100 flex flex-col justify-center items-center relative overflow-hidden">
-                                    <i class="fas fa-pills absolute -right-4 -bottom-4 text-6xl text-slate-200 opacity-50 transform rotate-12"></i>
-                                    <span class="text-sm font-semibold text-slate-500 mb-1 relative z-10">ใช้ยา (บดผสม)</span>
-                                    <div class="relative z-10">
-                                        <span class="num-font font-black text-4xl text-slate-800 tracking-tight">${res.totalTabs} <span class="text-xl font-semibold text-slate-500">เม็ด</span></span>
-                                    </div>
-                                    ${res.isStandard ? `<span class="text-[11px] font-medium text-emerald-600 mt-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 relative z-10">${res.standardLabel}</span>` : ''}
-                                </div>
-
-                                <!-- Dose Box -->
-                                ${doseBoxHtml}
-                            </div>
-
-                            <!-- Label Example Box -->
-                            <div class="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
-                                <div class="bg-slate-100 border-b border-slate-200 px-4 py-2.5 flex justify-between items-center">
-                                    <span class="text-xs font-bold text-slate-600"><i class="fas fa-print mr-1"></i> ตัวอย่างฉลากยา</span>
-                                    <button onclick="copyLabelText(this)" data-clipboard-text="${encodeURIComponent(fullTextForCopy)}" class="text-indigo-600 hover:text-indigo-800 bg-white hover:bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-md text-xs font-semibold transition flex items-center gap-1 shadow-sm">
-                                        <i class="far fa-copy"></i> คัดลอกทั้งหมด
-                                    </button>
-                                </div>
-                                <div class="p-5 font-mono text-sm text-slate-700 leading-relaxed space-y-4">
-                                    
-                                    <div class="label-line flex justify-between items-start border-b border-slate-100 pb-3">
-                                        <span>${line1}</span>
-                                        <button onclick="copyLabelText(this)" data-clipboard-text="${encodeURIComponent(line1)}" class="copy-line-btn text-slate-400 hover:text-indigo-600 px-2 bg-white border border-slate-200 rounded text-xs py-1" title="คัดลอกบรรทัดนี้"><i class="far fa-copy"></i></button>
-                                    </div>
-                                    
-                                    <div class="label-line flex justify-between items-start border-b border-slate-100 pb-3">
-                                        <span>${line2}</span>
-                                        <button onclick="copyLabelText(this)" data-clipboard-text="${encodeURIComponent(line2)}" class="copy-line-btn text-slate-400 hover:text-indigo-600 px-2 bg-white border border-slate-200 rounded text-xs py-1" title="คัดลอกบรรทัดนี้"><i class="far fa-copy"></i></button>
-                                    </div>
-                                    
-                                    <div class="label-line flex justify-between items-start ${line4 ? 'border-b border-slate-100 pb-3' : ''}">
-                                        <span>${line3}</span>
-                                        <button onclick="copyLabelText(this)" data-clipboard-text="${encodeURIComponent(line3)}" class="copy-line-btn text-slate-400 hover:text-indigo-600 px-2 bg-white border border-slate-200 rounded text-xs py-1" title="คัดลอกบรรทัดนี้"><i class="far fa-copy"></i></button>
-                                    </div>
-                                    
-                                    ${line4 ? `
-                                    <div class="label-line flex justify-between items-start">
-                                        <span>${line4}</span>
-                                        <button onclick="copyLabelText(this)" data-clipboard-text="${encodeURIComponent(line4)}" class="copy-line-btn text-slate-400 hover:text-indigo-600 px-2 bg-white border border-slate-200 rounded text-xs py-1" title="คัดลอกบรรทัดนี้"><i class="far fa-copy"></i></button>
-                                    </div>
-                                    ` : ''}
-
-                                </div>
-                            </div>
-                        </div>
+                let printHtml = `
+                    <div class="label-line flex justify-between items-center py-1.5 hover:bg-slate-50 rounded px-2 -mx-2 transition">
+                        <span class="text-[15px] font-medium text-slate-700">${line1}</span>
+                    </div>
+                    <div class="label-line flex justify-between items-center py-1.5 hover:bg-slate-50 rounded px-2 -mx-2 transition border-t border-slate-100/50 mt-1 pt-2">
+                        <span class="text-[15px] font-medium text-slate-700">${line2}</span>
                     </div>
                 `;
-            };
-
-            // Inject best option
-            bestOptionContainer.innerHTML = createCardHTML(results[0], 0);
-
-            // Inject remaining options if any
-            if (results.length > 1) {
-                let moreHtml = '';
-                for (let i = 1; i < results.length; i++) {
-                    moreHtml += createCardHTML(results[i], i);
+                if (line3) {
+                    printHtml += `
+                    <div class="label-line flex justify-between items-center py-1.5 hover:bg-slate-50 rounded px-2 -mx-2 transition border-t border-slate-100/50 mt-1 pt-2">
+                        <span class="text-[15px] font-medium text-slate-700">${line3}</span>
+                    </div>
+                    `;
                 }
-                moreOptionsContainer.innerHTML = moreHtml;
-                toggleBtn.classList.remove('hidden');
+                if (line4) {
+                    printHtml += `
+                    <div class="label-line flex justify-between items-center py-1.5 hover:bg-slate-50 rounded px-2 -mx-2 transition border-t border-slate-100/50 mt-1 pt-2">
+                        <span class="text-[15px] font-medium text-slate-700">${line4}</span>
+                    </div>
+                    `;
+                }
+
+                const fullText = [line1, line2, line3, line4].filter(Boolean).join('\n');
+
+                const cardHTML = `
+                <div class="relative bg-white rounded-2xl border-2 ${borderClass} transition-all hover:shadow-lg mt-5 ${index > 0 ? 'mb-6' : 'mb-4'}">
+                    
+                    ${showBadge ? `
+                    <div class="absolute -top-4 left-6 ${isOver60 ? 'bg-orange-500' : (!isBest ? 'bg-emerald-500' : 'bg-indigo-500')} text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md z-10 flex items-center">
+                        ${badgeText}
+                    </div>` : ''}
+
+                    <div class="p-4 md:p-6 pb-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- 1. ปริมาตรน้ำเชื่อมรวม -->
+                            <div class="${volBoxBg} rounded-xl p-4 text-center border ${volBoxBorder} flex flex-col justify-center items-center relative shadow-sm overflow-hidden">
+                                <i class="fas fa-flask absolute -right-2 -bottom-2 text-6xl ${volIconColor} transform -rotate-12 opacity-40"></i>
+                                <span class="text-sm font-semibold text-slate-500 mb-1 relative z-10">ปริมาตรน้ำเชื่อมรวม</span>
+                                <span class="num-font font-black text-4xl ${volTextNumColor} tracking-tight relative z-10">${res.volume} <span class="text-lg font-semibold ${volTextUnitColor}">ml</span></span>
+                                <div class="${volBadgeBg} ${volBadgeText} text-[10px] font-bold px-2 py-0.5 rounded-full mt-2 inline-flex items-center gap-1 relative z-10">
+                                    <i class="fas fa-tint"></i> ความเข้มข้น ${parseFloat(res.concentration.toFixed(2))} mg/ml
+                                </div>
+                            </div>
+
+                            <!-- 2. ใช้ยา -->
+                            <div class="bg-white rounded-xl p-4 text-center border border-slate-100 flex flex-col justify-center items-center relative shadow-sm">
+                                <i class="fas fa-pills absolute -right-2 -bottom-2 text-6xl text-slate-100 transform rotate-12 opacity-40"></i>
+                                <span class="text-sm font-semibold text-slate-500 mb-1 relative z-10">ใช้ยา (บดผสม)</span>
+                                <span class="num-font font-black text-4xl text-slate-700 tracking-tight relative z-10">${res.totalTabs} <span class="text-base font-semibold text-slate-400">เม็ด</span></span>
+                            </div>
+
+                            <!-- 3. ปริมาณป้อนต่อมื้อ -->
+                            ${doseBoxHtml}
+                        </div>
+                    </div>
+
+                    <!-- ฉลากยา 3 บรรทัด -->
+                    <div class="bg-slate-50/80 border-t border-slate-100 rounded-b-2xl p-4 md:px-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5"><i class="fas fa-print"></i> ตัวอย่างฉลากยา</h4>
+                            <button onclick="navigator.clipboard.writeText(\`${fullText}\`); this.innerHTML='<i class=\\'fas fa-check\\'></i> คัดลอกแล้ว'; setTimeout(()=>this.innerHTML='<i class=\\'far fa-copy\\'></i> คัดลอกทั้งหมด', 2000)" class="text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1">
+                                <i class="far fa-copy"></i> คัดลอกทั้งหมด
+                            </button>
+                        </div>
+                        <div class="bg-white border border-slate-200 rounded-lg p-3.5 shadow-sm">
+                            ${printHtml}
+                        </div>
+                    </div>
+                </div>
+                `;
                 
-                // Ensure options are hidden by default when calculation updates
-                moreOptionsContainer.classList.add('hidden-smooth');
-                moreOptionsContainer.classList.remove('show-smooth');
-                document.getElementById('toggleIcon').classList.remove('rotate-180');
-                toggleBtn.innerHTML = 'ดูทางเลือกอื่นๆ เพิ่มเติม <i class="fas fa-chevron-down transition-transform duration-300" id="toggleIcon"></i>';
-            } else {
-                toggleBtn.classList.add('hidden');
-                moreOptionsContainer.classList.add('hidden-smooth');
-                moreOptionsContainer.classList.remove('show-smooth');
-            }
+                bestOptionContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
         }
 
-        function toggleMoreOptions() {
-            const container = document.getElementById('moreOptionsContainer');
-            const icon = document.getElementById('toggleIcon');
-            const btn = document.getElementById('toggleBtn');
-            
-            if (container.classList.contains('hidden-smooth')) {
-                container.classList.remove('hidden-smooth');
-                container.classList.add('show-smooth');
-                btn.innerHTML = 'ซ่อนทางเลือกอื่นๆ <i class="fas fa-chevron-up transition-transform duration-300" id="toggleIcon"></i>';
-            } else {
-                container.classList.remove('show-smooth');
-                container.classList.add('hidden-smooth');
-                btn.innerHTML = 'ดูทางเลือกอื่นๆ เพิ่มเติม <i class="fas fa-chevron-down transition-transform duration-300" id="toggleIcon"></i>';
-            }
-        }
-
-        // ฟังก์ชันอ่านข้อความที่เข้ารหัสไว้และส่งไป Copy
-        function copyLabelText(buttonElement) {
-            const encodedText = buttonElement.getAttribute('data-clipboard-text');
-            const textToCopy = decodeURIComponent(encodedText);
-            
-            const originalHtml = buttonElement.innerHTML;
-            buttonElement.innerHTML = '<i class="fas fa-check text-emerald-500"></i>';
-            
-            // ใช้ Fallback แบบชัวร์สุด
-            fallbackCopyTextToClipboard(textToCopy);
-            
-            setTimeout(() => {
-                buttonElement.innerHTML = originalHtml;
-            }, 1500);
-        }
-
-        // Fallback วิธีการ Copy แบบดั้งเดิม (รองรับระบบโรงพยาบาลได้ดีกว่า)
-        function fallbackCopyTextToClipboard(text) {
-            var textArea = document.createElement("textarea");
-            textArea.value = text;
-            
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.position = "fixed";
-
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-                var successful = document.execCommand('copy');
-                // console.log('Fallback: Copying text command was ' + (successful ? 'successful' : 'unsuccessful'));
-            } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
-            }
-
-            document.body.removeChild(textArea);
-        }
-
-        // Initialize calculation on load
+        // Initialize on load
         window.onload = function() {
             calculate();
         };
