@@ -326,12 +326,64 @@
             if (calcD2 > 600) calcD2 = 600;
 
             let targetD1, targetD2;
+            let displayD1 = '', displayD2 = '';
             
             if(type === 'tablet') {
-                targetD1 = Math.round(calcD1 / 100) * 100;
-                targetD2 = Math.round(calcD2 / 100) * 100;
+                targetD1 = Math.round(calcD1 / 50) * 50;
+                targetD2 = Math.round(calcD2 / 50) * 50;
+                
+                // คำนวณจำนวนเม็ด
+                const tabsD1 = targetD1 / 200;
+                const tabsD2 = targetD2 / 200;
+                
+                // แปลงเป็นเศษส่วนที่เข้าใจง่าย
+                const formatTabs = (num) => {
+                    if (num === 0) return '0';
+                    const whole = Math.floor(num);
+                    const frac = num - whole;
+                    let fracStr = '';
+                    if (frac === 0.25) fracStr = '1/4';
+                    else if (frac === 0.5) fracStr = '1/2';
+                    else if (frac === 0.75) fracStr = '3/4';
+                    
+                    if (whole > 0 && fracStr) return `${whole} ${fracStr}`;
+                    if (whole > 0) return `${whole}`;
+                    return fracStr;
+                };
+
+                displayD1 = `${targetD1.toLocaleString()} <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span> <span class="text-sm font-medium text-slate-500 ml-1">(${tabsD1} เม็ด หรือ ${formatTabs(tabsD1)} เม็ด)</span>`;
+                displayD2 = `${targetD2.toLocaleString()} <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span> <span class="text-sm font-medium text-slate-500 ml-1">(${tabsD2} เม็ด หรือ ${formatTabs(tabsD2)} เม็ด)</span>`;
+                
             } else {
-                // ปัดเศษหลักสิบตามตารางเป๊ะๆ เพื่อให้ตัวเลข cc หารลงตัว
+                targetD1 = Math.round(calcD1 / 10) * 10;
+                targetD2 = Math.round(calcD2 / 10) * 10;
+                displayD1 = `${targetD1.toLocaleString()} <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span>`;
+                displayD2 = `${targetD2.toLocaleString()} <span class="text-xs font-semibold text-blue-500">mg/มื้อ</span>`;
+            }
+
+            document.getElementById('pvDay1').innerHTML = displayD1;
+            document.getElementById('pvDay2').innerHTML = displayD2;
+            previewBox.classList.remove('hidden');
+        }
+
+        function applyFaviData() {
+            const bw = parseFloat(document.getElementById('faviWeight').value);
+            if (!bw || bw <= 0) {
+                alert('กรุณาระบุน้ำหนักผู้ป่วย');
+                return;
+            }
+
+            // Extract just the number from the innerHTML string using regex
+            const d1Match = document.getElementById('pvDay1').innerHTML.match(/^([\d,]+)/);
+            const d2Match = document.getElementById('pvDay2').innerHTML.match(/^([\d,]+)/);
+            
+            const d1Text = d1Match ? d1Match[1].replace(/,/g, '') : '0';
+            const d2Text = d2Match ? d2Match[1].replace(/,/g, '') : '0';
+            
+            if(type === 'tablet') {
+                targetD1 = Math.round(calcD1 / 50) * 50;
+                targetD2 = Math.round(calcD2 / 50) * 50;
+            } else {
                 targetD1 = Math.round(calcD1 / 10) * 10;
                 targetD2 = Math.round(calcD2 / 10) * 10;
             }
